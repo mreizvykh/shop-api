@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/category.entity';
 import * as process from 'process';
 
 @Module({
@@ -16,7 +17,7 @@ import * as process from 'process';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [Category],
     }),
     CategoriesModule,
   ],
