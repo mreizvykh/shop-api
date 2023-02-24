@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { promisify } from 'node:util';
 import { pbkdf2, randomBytes } from 'node:crypto';
 import { UsersService } from '../users/users.service';
@@ -25,7 +26,10 @@ export class AuthService {
     return buffer.toString('hex');
   }
 
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async encodePassword(
     password: string,
@@ -52,5 +56,14 @@ export class AuthService {
     }
 
     return userData;
+  }
+
+  login(user: PublicUserData): { access_token: string } {
+    return {
+      access_token: this.jwtService.sign({
+        username: user.email,
+        sub: user.id,
+      }),
+    };
   }
 }
